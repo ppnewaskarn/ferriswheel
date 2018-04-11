@@ -18,7 +18,7 @@ class IMDBCrawler {
    }
    
    // function to log the current index
-   // usefull for debugging.
+   // useful for debugging.
    logIndex()
    {
         var allIndexedWords = Object.keys(this.index)
@@ -31,7 +31,7 @@ class IMDBCrawler {
    // Search the index. Primary logic is to 
    // get set of movies that relates to each word in the
    // search query and then return their intersection.
-   // Since we dont care about the relevance the order 
+   // Since we don't care about the relevance the order 
    // does not matter
    search(words)
    {    
@@ -105,7 +105,8 @@ class IMDBCrawler {
        // add title to index
        this._addToIndex(movieTitle,movieIndex);
 
-       http.get(url, function(response) {
+	   try 
+       {       http.get(url, function(response) {
               let body = "";
               
               response.on("data", data => {
@@ -126,7 +127,12 @@ class IMDBCrawler {
                     // But for now this much is enough. 
                     
                     this.parent.moviesCrawled++;
-
+					
+					if(this.parent.moviesCrawled % (this.parent.maxMoviesToCrawl/10) == 0)
+					{
+						console.log("Movies Crawled:" + this.parent.moviesCrawled);
+					}
+					
                     if(this.parent.moviesCrawled == this.parent.maxMoviesToCrawl && this.parent.onCrawlComplete)
                     {
                         this.parent.onCrawlComplete();
@@ -134,6 +140,15 @@ class IMDBCrawler {
                 });
 
             }.bind({parent:this}));
+	   }
+	   catch(err)
+	   {
+		   this.parent.moviesCrawled++;
+		   if(this.moviesCrawled == this.maxMoviesToCrawl && this.onCrawlComplete)
+		   {
+				this.onCrawlComplete();
+		   }
+	   }
     }
     
     _addToIndex(words,movieIndex)

@@ -7,7 +7,14 @@ var fs          = require('fs');
 
 let crawler = new IMDBCrawler();
 
-console.log("Starting to crawl data, it shold take about 30 Seconds..");
+// Some times IMDB.com reset the connection 
+// Node does not handle this gracefully. 
+process.on('uncaughtException', function (err) {
+  console.error(err.stack);
+  console.log("Node NOT Exiting...");
+});
+
+console.log("Starting to crawl data, it should take about 30 Seconds..");
 // initiate the crawl
 crawler.crawl(function(){
 	console.log("Done! Starting Server..");

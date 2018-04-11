@@ -1,0 +1,12 @@
+{
+  "name": "Ferriswheel_IMDB_Search",
+  "version": "1.0.0",
+  "description": "Search for tom 1000 IMDB movies",
+  "main": "app.js",
+  "license": "ISC",
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "html-entities": "^1.2.1",
+    "open": "^0.0.5"
+  }
+}

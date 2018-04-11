@@ -1,0 +1,66 @@
+<html>
+<head>
+<style>
+body {background-color: powderblue;}
+
+#main {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  margin: 0 0 0 -15%;
+  width:100%;
+  border: 0px;
+}
+
+.sboxin{
+	width: 30%;
+}
+
+.sboxout{
+	width: 30%;
+	margin: 10px 0 0 0;
+	height: 150px;
+}
+
+</style>
+</head>
+	<body>
+		<div id="main">
+			<input type="text" class="sboxin" id="sboxin"> <button type="button" onclick="doSearch()">Search</button>
+			<br>
+			<textarea class="sboxout" id="sboxout" wrap="hard">
+			</textarea>
+		</div>
+	</body>
+
+
+<script>
+
+document.getElementById("sboxin")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        doSearch();
+    }
+});
+
+function doSearch() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("sboxout").innerHTML =
+      this.responseText;
+    }
+    else if(this.readyState == 4)
+    {
+      document.getElementById("sboxout").innerHTML = "Error:"
+      this.status;
+    }
+  };
+  var q = document.getElementById("sboxin").value
+  xhttp.open("GET", "/search?q="+q, true);
+  xhttp.send();
+}
+</script>
+
+</html>
